@@ -64,6 +64,7 @@ async function getTopTracks(){
   // Endpoint reference : https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks
   return (await fetchWebApi(
     'v1/users/doijw0aow29qptmjr1fplkj4k/playlists', 'GET'
+    // me
   )).items;
 }
 
