@@ -1,0 +1,186 @@
+@font-face {
+    font-family: Circular;
+    src: url('fonts/Circular-Font-Family/AvenirLTStd-Book.otf');
+}
+
+:root {
+    --main-color: #272727;
+    --text-color: #FFFFFF
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    text-decoration: none;
+    list-style-type: none;
+    border: none;
+    outline: none;
+    font-family: Circular;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px 25px;
+}
+
+html,
+body {
+    background-color: var(--main-color);
+    width: 500px;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 56px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+main,
+header,
+section {
+    width: 100%;
+}
+
+
+/* HEADER */
+
+header nav {
+    width: 100%;
+}
+
+header nav ul {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+header nav ul .li-user-logo {
+    width: 48px;
+    height: 48px;
+    background-color: rgba(0, 0, 0, 0.2);
+    fill: rgba(0, 0, 0, 0.20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding-bottom: 2.25px;
+    margin-left: 53px;
+}
+
+header nav ul .li-user-logo .user-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+header nav ul .spotify {
+    margin: 0 50px;
+}
+
+header nav ul .spotify,
+header nav ul .spotify .spotify-link,
+header nav ul .spotify .spotify-link img {
+    width: 64px;
+    height: 64px;
+    display: block;
+}
+
+header nav ul .btn-login {
+    margin-right: 26px;
+}
+
+header nav ul .btn-login .login {
+    gap: 10px;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    background: #00591E;
+    border: 2px solid #FFF;
+    border-radius: 7px;
+    display: block;
+}
+
+header nav ul .btn-login .login:hover {
+    background-color: #FFF;
+    color: #00591E;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+header nav ul .btn-login .login:active {
+    transform: scale(0.9);
+}
+
+
+/* MAIN */
+
+main #playlists {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+main #playlists .name-section {
+    color: var(--text-color);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    margin-bottom: 50px;
+}
+
+main #playlists .playlists {
+    width: 400px;
+    height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: start;
+    border: 2px solid #8F8F8F;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+main #playlists .playlists::-webkit-scrollbar {
+    width: 5px;
+}
+
+main #playlists .playlists::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+main #playlists .playlists::-webkit-scrollbar-thumb {
+    background-color: #007728b0;
+    border-radius: 2.5px;
+}
+
+main #playlists .playlists .playlist:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {
+    margin-top: 20px;
+}
+
+main #playlists .playlists .playlist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100px;
+    height: 140px;
+}
+
+main #playlists .playlists .playlist img {
+    width: 100px;
+    height: 100px;
+}
+
+main #playlists .playlists .playlist h3 {
+    font-size: 11.1px;
+    font-weight: bolder;
+}
