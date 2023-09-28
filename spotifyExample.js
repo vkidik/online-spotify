@@ -47,6 +47,34 @@ const getData = await setData()
 
 
 
+// Authorization token that must have been created previously. See : https://developer.spotify.com/documentation/web-api/concepts/authorization
+const token = 'BQDvisS5nbkn9rqhRc4AiWCJ5gwuE1dsnaGYTTXfqMmPnl8ZzJQGDaLFuBCOqJiOuiKQHZIVvSiKvh4t7F1_qwrvy8EvLubOrAbUP0g_1Jl934sm6GPpi53lNWShyS9gCW043DjO-6EtZYtwX-eemHkDQs15RsJT8Mw-6fpRweZA3IVUYj8u1jBbfXJiLycu0GCye507ScOmyDCZRVLiGXxiiWPq282sqThEyHHJz5MW0Mi7n8S6MSYFO00gedgOmZcKhq3gQfzoZZYS0Rw0arlW';
+async function fetchWebApi(endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method,
+    body:JSON.stringify(body)
+  });
+  return await res.json();
+}
+
+async function getTopTracks(){
+  // Endpoint reference : https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks
+  return (await fetchWebApi(
+    'v1/users/doijw0aow29qptmjr1fplkj4k/playlists', 'GET'
+  )).items;
+}
+
+const topTracks = await getTopTracks();
+console.log(
+  topTracks
+);
+
+
+
+
 
 // Authorization token that must have been created previously. See : https://developer.spotify.com/documentation/web-api/concepts/authorization
 // const token = 'BQDvisS5nbkn9rqhRc4AiWCJ5gwuE1dsnaGYTTXfqMmPnl8ZzJQGDaLFuBCOqJiOuiKQHZIVvSiKvh4t7F1_qwrvy8EvLubOrAbUP0g_1Jl934sm6GPpi53lNWShyS9gCW043DjO-6EtZYtwX-eemHkDQs15RsJT8Mw-6fpRweZA3IVUYj8u1jBbfXJiLycu0GCye507ScOmyDCZRVLiGXxiiWPq282sqThEyHHJz5MW0Mi7n8S6MSYFO00gedgOmZcKhq3gQfzoZZYS0Rw0arlW';
