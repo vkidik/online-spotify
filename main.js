@@ -3,4 +3,6 @@ const songContainer = document.querySelector("main #playlists .playlists")
 
 btnLogin.addEventListener('click', () => {
     let user_api = prompt("Enter API from your account")
+
+    new APISpotify(user_api, 'playlists')
 })
