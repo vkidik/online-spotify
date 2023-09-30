@@ -69,14 +69,15 @@ header nav ul .li-user-logo {
     justify-content: center;
     border-radius: 50%;
     box-sizing: border-box;
-    padding-bottom: 2.25px;
     margin-left: 53px;
+    overflow: hidden;
 }
 
 header nav ul .li-user-logo .user-img {
     width: 24px;
     height: 24px;
     border-radius: 50%;
+    overflow: hidden;
 }
 
 header nav ul .spotify {
