@@ -1,3 +1,5 @@
+import { spotifyAPI } from '/spotifyData.js'
+
 const checkString = (t, e) => {
     if (!(t.split("").length > e)) return t; {
         let r = "";
@@ -7,74 +9,111 @@ const checkString = (t, e) => {
     }
 };
 
-const btnLogin = document.querySelector("header nav ul .btn-login .login")
-const userLogo = document.querySelector(".li-user-logo")
-const songContainer = document.querySelector("main #playlists .playlists")
+class MainApp{
+    constructor(){
+        this.spotifyAPI = null
+        this.token = null
 
-btnLogin.addEventListener('click', () => {
-    const token = prompt("Enter API from your account")
-    const spotifyAPI = new Spotify(`${token}`)
+        this.playlists = []
+        this.user = null
 
-    spotifyAPI.getRequest(`getProfile`).then(profile => {
-        userLogo.querySelector("a").href = profile.external_urls['spotify']
-        if (profile.images.length == 0) {
-            userLogo.querySelector('img').src = 'images/user.svg'
-            userLogo.querySelector("a").style.width = '24px'
-            userLogo.querySelector("a").style.height = '24px'
-        } else {
-            userLogo.querySelector('img').src = profile.images[0].url
-            userLogo.querySelector("a").style.width = '48px'
-            userLogo.querySelector("a").style.height = '48px'
+        this.btnLogin = document.querySelector('header nav ul .btn-login .login')
+        this.userLogo = document.querySelector('.li-user-logo')
+        this.songContainer = document.querySelector('main #playlists .playlists')
+
+        this.btnLogin.addEventListener('click', ()=> {this.loginClick(this.token)})
+    }
+    loginClick(token){
+        console.log(chrome.storage);
+        if(chrome.storage.local.get(["token"])){
+            chrome.storage.local.get(["token"]).then((result) => {
+                this.token = result
+            });
+        } else{
+            token = prompt("Enter API from your account")
+            this.token = token
+
+            chrome.storage.local.set({ token: this.token }).then(() => {
+                console.log("Token is set");
+            });
         }
-    })
 
-    spotifyAPI.getRequest('getPlaylists').then(playlists => {
-        while (songContainer.hasChildNodes()) {
-            songContainer.childNodes.forEach(child => {
-                child.remove()
-            })
-        }
+        console.log(this.token);
+        this.spotifyAPI = new spotifyAPI(token)
 
-        console.log(playlists);
+        this.getProfile(this.spotifyAPI)
+        this.getPlaylists(this.spotifyAPI)
+    }
+    getProfile(api){
+        api.getRequest(`getProfile`).then(profile => {
+            this.user = profile
+            console.log(this.user)
 
-        playlists.forEach(playlist => {
-            const playlistHref = playlist.external_urls['spotify']
-            const playlistImg = () => {
-                if (playlist.images.length == 0) {
-                    return 'images/img_error.png'
-                } else {
-                    return playlist.images[0].url
-                }
+            this.userLogo.querySelector("a").href = profile.external_urls['spotify']
+            if (profile.images.length == 0) {
+                this.userLogo.querySelector('img').src = 'images/user.svg'
+                this.userLogo.querySelector("a").style.width = '24px'
+                this.userLogo.querySelector("a").style.height = '24px'
+            } else {
+                this.userLogo.querySelector('img').src = profile.images[0].url
+                this.userLogo.querySelector("a").style.width = '48px'
+                this.userLogo.querySelector("a").style.height = '48px'
             }
-            const playlistName = checkString(playlist.name, 20)
+        })
+    }
+    getPlaylists(api){
+        api.getRequest('getPlaylists').then(playlists => {
+            this.playlists = playlists
+            console.log(this.playlists);
 
-            let aPlaylist = document.createElement("a")
-            aPlaylist.href = playlistHref
-            aPlaylist.classList += "playlist"
+            while (this.songContainer.hasChildNodes()) {
+                this.songContainer.childNodes.forEach(child => {
+                    child.remove()
+                })
+            }
+    
+            playlists.forEach(playlist => {
+                const playlistHref = playlist.external_urls['spotify']
+                const playlistImg = () => {
+                    if (playlist.images.length == 0) {
+                        return 'images/img_error.png'
+                    } else {
+                        return playlist.images[0].url
+                    }
+                }
+                const playlistName = checkString(playlist.name, 20)
+    
+                let aPlaylist = document.createElement("a")
+                aPlaylist.href = playlistHref
+                aPlaylist.classList += "playlist"
+    
+                let imgPlaylist = document.createElement("img")
+                imgPlaylist.src = playlistImg()
+                imgPlaylist.alt = playlistName
+                aPlaylist.appendChild(imgPlaylist)
+    
+                let namePlaylist = document.createElement("h3")
+                namePlaylist.classList += "name-playlist"
+                namePlaylist.innerHTML = playlistName
+                aPlaylist.appendChild(namePlaylist)
+    
+                this.songContainer.appendChild(aPlaylist)
+            });
 
-            let imgPlaylist = document.createElement("img")
-            imgPlaylist.src = playlistImg()
-            imgPlaylist.alt = playlistName
-            aPlaylist.appendChild(imgPlaylist)
+            const openMusics = (playlists) => {
+                playlists.forEach(playlist => {
+                    playlist.addEventListener('click', event => {
+                        event.preventDefault()
+            
+                        const newWindow = window.open(playlist.href)
+                    })
+                });
+            }
+    
+            openMusics(document.querySelectorAll("a.playlist"))
+        })
+    }
+}
 
-            let namePlaylist = document.createElement("h3")
-            namePlaylist.classList += "name-playlist"
-            namePlaylist.innerHTML = playlistName
-            aPlaylist.appendChild(namePlaylist)
-
-            songContainer.appendChild(aPlaylist)
-        });
-
-        openMusics(document.querySelectorAll("a.playlist"))
-    })
-})
-
-// const openMusics = playlists => {
-//     playlists.forEach(playlist => {
-//         playlist.addEventListener('click', event => {
-//             event.preventDefault()
-
-//             const newWindow = window.open(playlist.href)
-//         })
-//     });
-// }
+const MainClass = new MainApp()
+console.log(MainClass);

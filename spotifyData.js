@@ -1,18 +1,19 @@
-class Spotify {
+export class spotifyAPI {
     constructor(token) {
         this.token = token
     }
 
-    async getRequest(data, ...args) {
+    async getRequest(data) {
         if (this[data]) {
-            return (await this[data].apply(this, args))
+            return (await this[data]())
+            // return (await this[data].apply(this, args))
         }
     }
 
     async getWebAPI(endpoint, method, body) {
         const res = await fetch(`https://api.spotify.com/${endpoint}`, {
             headers: {
-                Authorization: `Bearer ${this.token}`,
+                'Authorization': `Bearer ${this.token}`,
             },
             method,
             body: JSON.stringify(body)
@@ -24,9 +25,9 @@ class Spotify {
         return (await this.getWebAPI('v1/me/playlists?limit=50', 'GET')).items;
     }
 
-    async getDataPlaylist(playlistHref) {
+    // async getDataPlaylist(playlistHref) {
 
-    }
+    // }
 
     async getTopTracks() {
         return (await this.getWebAPI('v1/me/top/tracks?time_range=short_term', 'GET')).items;
