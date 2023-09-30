@@ -3,9 +3,9 @@ class Spotify {
         this.token = token
     }
 
-    async getRequest(data) {
+    async getRequest(data, ...args) {
         if (this[data]) {
-            return (await this[data]())
+            return (await this[data].apply(this, args))
         }
     }
 
@@ -24,19 +24,30 @@ class Spotify {
         return (await this.getWebAPI('v1/me/playlists?limit=50', 'GET')).items;
     }
 
+    async getDataPlaylist(playlistHref) {
+
+    }
+
     async getTopTracks() {
         return (await this.getWebAPI('v1/me/top/tracks?time_range=short_term', 'GET')).items;
     }
 
-    async getProfile(){
+    async getProfile() {
         return (await this.getWebAPI(`v1/me`, 'GET'))
     }
+
+    // async getPlayer(data) {
+    //     const res = await fetch('https://api.spotify.com/v1/me/player/play', {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Authorization': `Bearer ${this.token}`,
+    //             'Content-Type': 'application/json' 
+    //         },
+    //         body: JSON.stringify(
+    //             {
+    //                 urls: ['spotify:track']
+    //             }
+    //         ) 
+    //     })
+    // }
 }
-
-
-// let spotifyAPI = new Spotify(``)
-//     spotifyAPI.getRequest('getPlaylists').then(playlists => {
-//         for(playlist of playlists){
-//             console.log(playlist)
-//         }
-//     })

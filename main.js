@@ -1,22 +1,30 @@
+const checkString = (t, e) => {
+    if (!(t.split("").length > e)) return t; {
+        let r = "";
+        t = t.split("");
+        for (let l = 0; l < e; l++) r += t[l], l == e - 1 && (r += "...");
+        return r
+    }
+};
+
 const btnLogin = document.querySelector("header nav ul .btn-login .login")
 const userLogo = document.querySelector(".li-user-logo")
 const songContainer = document.querySelector("main #playlists .playlists")
 
 btnLogin.addEventListener('click', () => {
-    let token = prompt("Enter API from your account")
-    let spotifyAPI = new Spotify(`${token}`)
+    const token = prompt("Enter API from your account")
+    const spotifyAPI = new Spotify(`${token}`)
 
     spotifyAPI.getRequest(`getProfile`).then(profile => {
-        console.log(profile);
         userLogo.querySelector("a").href = profile.external_urls['spotify']
-        if(profile.images.length == 0){
+        if (profile.images.length == 0) {
+            userLogo.querySelector('img').src = 'images/user.svg'
             userLogo.querySelector("a").style.width = '24px'
             userLogo.querySelector("a").style.height = '24px'
-            userLogo.querySelector('img').src = 'images/img_error.png'
-        } else{
+        } else {
+            userLogo.querySelector('img').src = profile.images[0].url
             userLogo.querySelector("a").style.width = '48px'
             userLogo.querySelector("a").style.height = '48px'
-            userLogo.querySelector('img').src = profile.images[0].url
         }
     })
 
@@ -26,28 +34,47 @@ btnLogin.addEventListener('click', () => {
                 child.remove()
             })
         }
+
+        console.log(playlists);
+
         playlists.forEach(playlist => {
-            // console.log(playlist);
+            const playlistHref = playlist.external_urls['spotify']
+            const playlistImg = () => {
+                if (playlist.images.length == 0) {
+                    return 'images/img_error.png'
+                } else {
+                    return playlist.images[0].url
+                }
+            }
+            const playlistName = checkString(playlist.name, 20)
+
             let aPlaylist = document.createElement("a")
-            aPlaylist.href = playlist.external_urls['spotify']
+            aPlaylist.href = playlistHref
             aPlaylist.classList += "playlist"
 
             let imgPlaylist = document.createElement("img")
-            if(playlist.images.length == 0){
-                imgPlaylist.src = 'images/img_error.png'
-            } else{
-                imgPlaylist.src = playlist.images[0].url
-            }
-            
-            imgPlaylist.alt = playlist.name
+            imgPlaylist.src = playlistImg()
+            imgPlaylist.alt = playlistName
             aPlaylist.appendChild(imgPlaylist)
 
             let namePlaylist = document.createElement("h3")
             namePlaylist.classList += "name-playlist"
-            namePlaylist.innerHTML = playlist.name
+            namePlaylist.innerHTML = playlistName
             aPlaylist.appendChild(namePlaylist)
 
             songContainer.appendChild(aPlaylist)
         });
+
+        openMusics(document.querySelectorAll("a.playlist"))
     })
 })
+
+// const openMusics = playlists => {
+//     playlists.forEach(playlist => {
+//         playlist.addEventListener('click', event => {
+//             event.preventDefault()
+
+//             const newWindow = window.open(playlist.href)
+//         })
+//     });
+// }

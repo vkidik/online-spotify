@@ -134,12 +134,12 @@ main #playlists .name-section {
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 main #playlists .playlists {
     width: 400px;
-    height: 200px;
+    height: 250px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
