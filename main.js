@@ -113,9 +113,7 @@ class MainApp{
                 playlists.forEach(playlist => {
                     playlist.addEventListener('click', event => {
                         event.preventDefault()
-                        
                         this.getPlaylistItems(api, playlist)
-                        // console.log(`v1/playlists/${playlist.getAttribute("playlistId")}/tracks`);
                     })
                 });
             }
@@ -129,7 +127,8 @@ class MainApp{
         let playlistTracks = [] 
         console.log(playlistId);
 
-        // limit=50
+        for(let i = 0; i < Math.ceil(totalTracks / 50); i)
+
         api.getRequest(`getPlaylistItems`, playlistId, totalTracks).then(items => {
             if(items){
                 items.forEach(items => {
@@ -146,6 +145,17 @@ class MainApp{
 //     let a = 230
 //     a - (a - i * 50)
 //     console.log(a)
+// }
+
+// let count = 230
+// let limitCount = 50
+
+// for(let i = 0; i < Math.ceil(count/limitCount); i++){
+//     if(i != Math.floor(count/limitCount)){
+//         console.log(limitCount)
+//     } else{
+//         console.log(count%limitCount)
+//     }
 // }
 
 window.MainClass = new MainApp()
