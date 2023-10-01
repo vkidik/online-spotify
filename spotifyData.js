@@ -3,10 +3,10 @@ export class spotifyAPI {
         this.token = token
     }
 
-    async getRequest(data) {
+    async getRequest(data, ...args) {
         if (this[data]) {
-            return (await this[data]())
-            // return (await this[data].apply(this, args))
+            // return (await this[data]())
+            return (await this[data].apply(this, args))
         }
     }
 
@@ -25,9 +25,9 @@ export class spotifyAPI {
         return (await this.getWebAPI('v1/me/playlists?limit=50', 'GET')).items;
     }
 
-    // async getDataPlaylist(playlistHref) {
-
-    // }
+    async getPlaylistItems(playlistId, count) {
+        return (await this.getWebAPI(`v1/playlists/${playlistId}/tracks?limit=${count}`, 'GET')).items;
+    }
 
     async getTopTracks() {
         return (await this.getWebAPI('v1/me/top/tracks?time_range=short_term', 'GET')).items;

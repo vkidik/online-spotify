@@ -11,9 +11,8 @@ const checkString = (t, e) => {
 
 class MainApp{
     constructor(){
-        this.spotifyAPI = null
-        this.token = null
-
+        this.token
+        this.spotifyAPI
         this.playlists = []
         this.user = null
 
@@ -21,29 +20,34 @@ class MainApp{
         this.userLogo = document.querySelector('.li-user-logo')
         this.songContainer = document.querySelector('main #playlists .playlists')
 
-        this.btnLogin.addEventListener('click', ()=> {this.loginClick(this.token)})
+        this.checkLogin()
+        this.btnLogin.addEventListener('click', ()=> {this.loginClick()})
     }
-    loginClick(token){
-        console.log(chrome.storage);
-        if(chrome.storage.local.get(["token"])){
-            chrome.storage.local.get(["token"]).then((result) => {
-                this.token = result
-            });
-        } else{
-            token = prompt("Enter API from your account")
-            this.token = token
 
-            chrome.storage.local.set({ token: this.token }).then(() => {
-                console.log("Token is set");
-            });
-        }
+    checkLogin(){
+        chrome.storage.local.get(["token"]).then(tokenResult => {
+            if(tokenResult.token != ""){
+                this.token = tokenResult.token
+                this.getDataAPI(this.token)
+            }
+        })
+    }
 
-        console.log(this.token);
+    loginClick(){
+        this.token = prompt("Enter API from your account")
+        this.getDataAPI(this.token)
+    }
+
+    getDataAPI(token){
+        chrome.storage.local.set({ token: token }).then(() => {
+            console.log("Token is set");
+        });
+        console.log(token);
         this.spotifyAPI = new spotifyAPI(token)
-
         this.getProfile(this.spotifyAPI)
         this.getPlaylists(this.spotifyAPI)
     }
+
     getProfile(api){
         api.getRequest(`getProfile`).then(profile => {
             this.user = profile
@@ -81,10 +85,15 @@ class MainApp{
                         return playlist.images[0].url
                     }
                 }
-                const playlistName = checkString(playlist.name, 20)
+                const playlistName = checkString(playlist.name, 17)
+                const playlistId = playlist.id
+                const totalTracks = playlist.tracks.total
     
                 let aPlaylist = document.createElement("a")
                 aPlaylist.href = playlistHref
+                // aPlaylist.playlistId = playlistId
+                aPlaylist.setAttribute('playlistId', playlistId)
+                aPlaylist.setAttribute('totaltracks', totalTracks)
                 aPlaylist.classList += "playlist"
     
                 let imgPlaylist = document.createElement("img")
@@ -104,8 +113,9 @@ class MainApp{
                 playlists.forEach(playlist => {
                     playlist.addEventListener('click', event => {
                         event.preventDefault()
-            
-                        const newWindow = window.open(playlist.href)
+                        
+                        this.getPlaylistItems(api, playlist)
+                        // console.log(`v1/playlists/${playlist.getAttribute("playlistId")}/tracks`);
                     })
                 });
             }
@@ -113,7 +123,30 @@ class MainApp{
             openMusics(document.querySelectorAll("a.playlist"))
         })
     }
+    getPlaylistItems(api, playlist){
+        const playlistId = `${playlist.getAttribute('playlistid')}`
+        const totalTracks = `${playlist.getAttribute('totaltracks')}`
+        let playlistTracks = [] 
+        console.log(playlistId);
+
+        // limit=50
+        api.getRequest(`getPlaylistItems`, playlistId, totalTracks).then(items => {
+            if(items){
+                items.forEach(items => {
+                    playlistTracks.push(items.track)
+                })
+            }
+            console.log(playlistTracks);
+        })
+    }
 }
 
-const MainClass = new MainApp()
+
+// for(let i = 1; i < Math.ceil(230/50); i++){
+//     let a = 230
+//     a - (a - i * 50)
+//     console.log(a)
+// }
+
+window.MainClass = new MainApp()
 console.log(MainClass);
