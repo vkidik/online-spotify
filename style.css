@@ -17,26 +17,28 @@
     border: none;
     outline: none;
     font-family: Circular;
-    font-size: 16px;
+    font-size: 1em;
 }
 
 .btn {
-    padding: 10px 25px;
+    padding: .8em 1.5em;
+    font-size: 10px;
 }
 
 html,
 body {
     background-color: var(--main-color);
-    width: 500px;
+    width: 320px;
     height: 500px;
     box-sizing: border-box;
 }
 
 body {
-    padding: 56px 50px;
+    padding: 30px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border: 1px solid #fff;
 }
 
 main,
@@ -55,7 +57,7 @@ header nav {
 header nav ul {
     width: 100%;
     display: inline-flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -69,7 +71,6 @@ header nav ul .li-user-logo {
     justify-content: center;
     border-radius: 50%;
     box-sizing: border-box;
-    margin-left: 53px;
     overflow: hidden;
 }
 
@@ -79,10 +80,10 @@ header nav ul .li-user-logo .user-img {
     border-radius: 50%;
     overflow: hidden;
 }
-
+/* 
 header nav ul .spotify {
     margin: 0 50px;
-}
+} */
 
 header nav ul .spotify,
 header nav ul .spotify .spotify-link,
@@ -93,12 +94,10 @@ header nav ul .spotify .spotify-link img {
 }
 
 header nav ul .btn-login {
-    margin-right: 26px;
 }
 
 header nav ul .btn-login .login {
-    gap: 10px;
-    font-size: 10px;
+    font-size: .9em;
     font-style: normal;
     font-weight: 600;
     background: #00591E;
@@ -118,6 +117,30 @@ header nav ul .btn-login .login:active {
     transform: scale(0.9);
 }
 
+/* body */
+
+.container-text{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name-section {
+    color: var(--text-color);
+    font-size: 2em;
+    font-style: normal;
+    font-weight: 900;
+    text-align: center;
+}
+
+.name-user{
+    color: var(--text-color);
+    font-size: 1.5em;
+    font-style: normal;
+    font-weight: 500;
+    text-align: center;
+}
 
 /* MAIN */
 
@@ -129,25 +152,18 @@ main #playlists {
     justify-content: space-between;
 }
 
-main #playlists .name-section {
-    color: var(--text-color);
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 600;
-    margin-bottom: 25px;
-}
-
 main #playlists .playlists {
-    width: 400px;
-    height: 250px;
+    width: 100%;
+    height: 55vh;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: start;
     border: 2px solid #8F8F8F;
     padding: 10px;
     box-sizing: border-box;
     overflow-y: scroll;
+    align-content: space-between;
 }
 
 main #playlists .playlists::-webkit-scrollbar {
@@ -163,17 +179,28 @@ main #playlists .playlists::-webkit-scrollbar-thumb {
     border-radius: 2.5px;
 }
 
-main #playlists .playlists .playlist:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {
+/* main #playlists .playlists .playlist:not(:nth-child(1)):not(:nth-child(2)) {
     margin-top: 20px;
-}
+} */
 
 main #playlists .playlists .playlist {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-around;
+    justify-content: flex-start;
     width: 100px;
     height: 140px;
+    margin-bottom: 15px;
+    border-radius: 15px 15px 0 0;
+    transition: 0.15s linear transform;
+    overflow: hidden;
+}
+
+main #playlists .playlists .playlist:hover{
+    transform: scale(1.1);
+}
+main #playlists .playlists .playlist:active{
+    transform: scale(1.2);
 }
 
 main #playlists .playlists .playlist img {
@@ -182,6 +209,7 @@ main #playlists .playlists .playlist img {
 }
 
 main #playlists .playlists .playlist h3 {
-    font-size: 11.1px;
+    margin-top: 5px;
+    font-size: 1em;
     font-weight: bolder;
 }

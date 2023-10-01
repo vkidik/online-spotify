@@ -11,7 +11,7 @@ const checkString = (t, e) => {
 
 class MainApp{
     constructor(){
-        this.token
+        this.token = null
         this.spotifyAPI
         this.playlists = []
         this.user = null
@@ -35,10 +35,15 @@ class MainApp{
 
     loginClick(){
         this.token = prompt("Enter API from your account")
+        while(this.token == ''){
+            this.token = prompt("Enter API from your account")
+        }
         this.getDataAPI(this.token)
     }
 
     getDataAPI(token){
+        console.clear()
+
         chrome.storage.local.set({ token: token }).then(() => {
             console.log("Token is set");
         });
@@ -52,7 +57,14 @@ class MainApp{
         api.getRequest(`getProfile`).then(profile => {
             this.user = profile
             console.log(this.user)
-
+            const username = profile.display_name
+            if(username != undefined){
+                document.querySelector("a.name-user").innerHTML = `Hi, ${username}!`
+            } else{
+                document.querySelector("a.name-user").innerHTML = `Hi, User!`
+            }
+            
+            document.querySelector("a.name-user").href = profile.external_urls['spotify']
             this.userLogo.querySelector("a").href = profile.external_urls['spotify']
             if (profile.images.length == 0) {
                 this.userLogo.querySelector('img').src = 'images/user.svg'
@@ -127,25 +139,38 @@ class MainApp{
         let playlistTracks = [] 
         console.log(playlistId);
 
-        for(let i = 0; i < Math.ceil(totalTracks / 50); i)
-
-        api.getRequest(`getPlaylistItems`, playlistId, totalTracks).then(items => {
-            if(items){
-                items.forEach(items => {
-                    playlistTracks.push(items.track)
+        const limitSongs = 50
+        for(let i = 0; i < Math.ceil(totalTracks / limitSongs); i++){
+            if(i != Math.floor(totalTracks / limitSongs)){
+                api.getRequest(`getPlaylistItems`, playlistId, limitSongs).then(items => {
+                    if(items){
+                        items.forEach(items => {
+                            playlistTracks.push(items.track)
+                        })
+                    }
+                })        
+            } else{
+                api.getRequest(`getPlaylistItems`, playlistId, (totalTracks % limitSongs)).then(items => {
+                    if(items){
+                        items.forEach(items => {
+                            playlistTracks.push(items.track)
+                        })
+                    }
+                    console.log(`playlist ID${playlistId}:`);
+                    console.log(playlistTracks);
                 })
             }
-            console.log(playlistTracks);
-        })
+        }
+        // api.getRequest(`getPlaylistItems`, playlistId, totalTracks).then(items => {
+        //     if(items){
+        //         items.forEach(items => {
+        //             playlistTracks.push(items.track)
+        //         })
+        //     }
+        //     console.log(playlistTracks);
+        // })
     }
 }
-
-
-// for(let i = 1; i < Math.ceil(230/50); i++){
-//     let a = 230
-//     a - (a - i * 50)
-//     console.log(a)
-// }
 
 // let count = 230
 // let limitCount = 50
