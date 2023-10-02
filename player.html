@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spotify KOMP</title>
+</head>
+<body>
+    <h1>Spotify KOMP</h1>
+    <button id="togglePlay">Toggle Play</button>
+
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const token = 'BQCQgGCLAxG817HJkJBiGQaU81lxgqVAJt121Jw32rK4SCd-CXf4mod9tu-70l4W2BaF4QJ8HiHhj1fOCfrNYkx9nPG13538Fo8j7UGwzYjxsUVvS0FDi0bsAqUqWGq4q_rs6O7O5ihKCNbaGlm2vYtxzICsLO4AukFaUJK-XISgaSMNmDEkrLc4--AZffhZVchMd6IvTCRAwUf6p6_uYF7BiwFO';
+            window.player = new Spotify.Player({
+                name: 'KOMP Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.5
+            });
+
+            // Ready
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Ready with Device ID', device_id);
+            });
+
+            // Not Ready
+            player.addListener('not_ready', ({ device_id }) => {
+                console.log('Device ID has gone offline', device_id);
+            });
+
+            player.addListener('initialization_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('authentication_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('account_error', ({ message }) => {
+                console.error(message);
+            });
+
+            document.getElementById('togglePlay').onclick = function() {
+              player.togglePlay();
+            };
+
+            player.connect();
+        }
+    </script>
+</body>
+</html>

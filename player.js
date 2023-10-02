@@ -1,5 +1,5 @@
-// https://developer.spotify.com/documentation/web-playback-sdk
-// Подключение Spotify Web Playback SDK
+// // https://developer.spotify.com/documentation/web-playback-sdk
+// // Подключение Spotify Web Playback SDK
 // window.onSpotifyWebPlaybackSDKReady = () => {
 //     const token = 'BQBMA3fO5AwyiI_atp_ognfnLg3vbPdSZ-PYeBvTgWAjJtKT-vzu64ovxzfk67SFUuea0ELrMB6ozzBrJnEeDwuCCK-FWaTOa2isFhOx1HfUMHRCzqxtbQpOR6l9WPL8OZvjdY6A7FsAZiVuPV_JZkgpogpG2zCBeVSd-1ZwdyFSvBkx4pnVc06gAV05pHUvlcVlAdaRz6Z6bOkMrcJGgHqE1XV817TmNa2YqqhWJggFWuMxCv82NFup84rHNh0I19is__AlQto8qPhbWDqZO4kB'; // Замените на ваш доступный токен
 //     const player = new Spotify.Player({

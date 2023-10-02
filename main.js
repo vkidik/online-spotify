@@ -124,6 +124,37 @@ class MainApp{
             const openMusics = (playlists) => {
                 playlists.forEach(playlist => {
                     playlist.addEventListener('click', event => {
+                        if(!document.querySelector(".player")){
+                            document.body.innerHTML += `
+                            <div class="player" hidden="true">
+                                <button class="btn close"><span>⏷︎</span></button>
+                                <div class="player-container">
+                                    <img src="images/example-playlists.png" alt="track" class="player-img">
+                                    <div class="text-data">
+                                        <h2 class="player-name">Track</h2>
+                                        <h3 class="player-author">author</h3>
+                                    </div>
+                                    <div class="btns">
+                                        <button class="btn return skip">⏮︎</button>
+                                        <button class="btn play"><span>▶</span></button>
+                                        <button class="btn next skip">⏭︎</button>
+                                    </div>
+                                </div>
+                            </div>`
+                            let player = document.querySelector(".player")
+                            document.querySelector(".player .btn.close").addEventListener("click", ()=>{
+                                if(player.getAttribute("hidden") == 'true'){
+                                    player.setAttribute("hidden", "false")
+                                    player.style.bottom = '0'
+                                } else{
+                                    player.setAttribute("hidden", "true")
+                                    player.style.bottom = '-87.5%'
+                                }
+                            })
+                            document.querySelector(".player .btn.play").addEventListener('click', ()=> {
+                                document.querySelector(".player .btn.play span").innerHTML == "▶" ? document.querySelector(".player .btn.play span").innerHTML = "⏸︎" : document.querySelector(".player .btn.play span").innerHTML = "▶" 
+                            })
+                        }
                         event.preventDefault()
                         this.getPlaylistItems(api, playlist)
                     })
