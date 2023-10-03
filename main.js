@@ -124,24 +124,12 @@ class MainApp{
             const openMusics = (playlists) => {
                 playlists.forEach(playlist => {
                     playlist.addEventListener('click', event => {
-                        if(!document.querySelector(".player")){
-                            document.body.innerHTML += `
-                            <div class="player" hidden="true">
-                                <button class="btn close"><span>⏷︎</span></button>
-                                <div class="player-container">
-                                    <img src="images/example-playlists.png" alt="track" class="player-img">
-                                    <div class="text-data">
-                                        <h2 class="player-name">Track</h2>
-                                        <h3 class="player-author">author</h3>
-                                    </div>
-                                    <div class="btns">
-                                        <button class="btn return skip">⏮︎</button>
-                                        <button class="btn play"><span>▶</span></button>
-                                        <button class="btn next skip">⏭︎</button>
-                                    </div>
-                                </div>
-                            </div>`
-                            let player = document.querySelector(".player")
+                        console.log("click");
+                        event.preventDefault()
+
+                        let player = document.querySelector(".player")
+                        if(player.style.display == ""){
+                            player.style.display = "flex"
                             document.querySelector(".player .btn.close").addEventListener("click", ()=>{
                                 if(player.getAttribute("hidden") == 'true'){
                                     player.setAttribute("hidden", "false")
@@ -155,7 +143,7 @@ class MainApp{
                                 document.querySelector(".player .btn.play span").innerHTML == "▶" ? document.querySelector(".player .btn.play span").innerHTML = "⏸︎" : document.querySelector(".player .btn.play span").innerHTML = "▶" 
                             })
                         }
-                        event.preventDefault()
+
                         this.getPlaylistItems(api, playlist)
                     })
                 });
@@ -167,8 +155,7 @@ class MainApp{
     getPlaylistItems(api, playlist){
         const playlistId = `${playlist.getAttribute('playlistid')}`
         const totalTracks = `${playlist.getAttribute('totaltracks')}`
-        let playlistTracks = [] 
-        console.log(playlistId);
+        let playlistTracks = []
 
         const limitSongs = 50
         for(let i = 0; i < Math.ceil(totalTracks / limitSongs); i++){
@@ -187,8 +174,9 @@ class MainApp{
                             playlistTracks.push(items.track)
                         })
                     }
-                    console.log(`playlist ID${playlistId}:`);
+                    console.log(`playlist ID: ${playlistId}:`);
                     console.log(playlistTracks);
+                    this.setPlayerData(playlistTracks[0])
                 })
             }
         }
@@ -200,6 +188,20 @@ class MainApp{
         //     }
         //     console.log(playlistTracks);
         // })
+    }
+
+    setPlayerData(track){
+        console.log(track);
+        
+        const trackImg = track.album.images[0].url
+        const trackName = track.name
+        const trackAuthor = track.artists[0].name
+        
+        let player = document.querySelector(".player")
+
+        player.querySelector(".player-img").src = trackImg
+        player.querySelector(".player-name").innerHTML = trackName
+        player.querySelector(".player-author").innerHTML = trackAuthor
     }
 }
 
