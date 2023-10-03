@@ -1,4 +1,5 @@
 import { spotifyAPI } from '/spotifyData.js'
+import { Player } from '/player.js'
 
 const checkString = (t, e) => {
     if (!(t.split("").length > e)) return t; {
@@ -15,6 +16,7 @@ class MainApp{
         this.spotifyAPI
         this.playlists = []
         this.user = null
+        this.musicPlayer
 
         this.btnLogin = document.querySelector('header nav ul .btn-login .login')
         this.userLogo = document.querySelector('.li-user-logo')
@@ -49,6 +51,7 @@ class MainApp{
         });
         console.log(token);
         this.spotifyAPI = new spotifyAPI(token)
+        this.musicPlayer = new Player(token)
         this.getProfile(this.spotifyAPI)
         this.getPlaylists(this.spotifyAPI)
     }
@@ -196,12 +199,15 @@ class MainApp{
         const trackImg = track.album.images[0].url
         const trackName = track.name
         const trackAuthor = track.artists[0].name
+        const trackUri = track.uri
         
         let player = document.querySelector(".player")
 
         player.querySelector(".player-img").src = trackImg
         player.querySelector(".player-name").innerHTML = trackName
         player.querySelector(".player-author").innerHTML = trackAuthor
+
+        this.musicPlayer.onMusic(document.querySelector(".btn.play"))
     }
 }
 
